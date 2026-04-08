@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from loguru import logger
 
 from app.config import get_settings
@@ -43,9 +43,9 @@ class RiskAgent:
     def __init__(self) -> None:
         settings = get_settings()
         self.settings = settings
-        self.llm = ChatOpenAI(
-            model=settings.openai_model,
-            api_key=settings.openai_api_key,
+        self.llm = ChatGoogleGenerativeAI(
+            model=settings.gemini_model,
+            google_api_key=settings.google_api_key,
             temperature=0,
         )
 

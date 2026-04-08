@@ -9,9 +9,9 @@ from functools import lru_cache
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # OpenAI
-    openai_api_key: str = "sk-placeholder"
-    openai_model: str = "gpt-4o"
+    # Google Gemini
+    google_api_key: str = "placeholder"
+    gemini_model: str = "gemini-2.5-flash"
 
     # MongoDB
     mongodb_uri: str = "mongodb://localhost:27017"
