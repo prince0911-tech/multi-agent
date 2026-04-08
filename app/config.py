@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     app_port: int = 8080
     secret_key: str = "change-me-in-production"
 
+    # CORS — comma-separated list of allowed origins, or "*" for development
+    cors_origins: str = "*"
+
     # Scheduler
     scheduler_timezone: str = "UTC"
     deadline_check_interval_minutes: int = 30
@@ -34,6 +37,13 @@ class Settings(BaseSettings):
     # Risk thresholds
     overdue_warning_hours: int = 24
     overload_task_threshold: int = 10
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Return CORS origins as a list."""
+        if self.cors_origins.strip() == "*":
+            return ["*"]
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
 
 @lru_cache

@@ -40,11 +40,13 @@ async def _check_deadlines_job() -> None:
         overdue = await get_overdue_tasks(user_id)
         for task in overdue:
             # Avoid duplicate alerts within the same hour
+            # Avoid duplicate alerts within the same hour
+            current_hour = now.replace(minute=0, second=0, microsecond=0)
             existing = await db.alerts.find_one({
                 "user_id": user_id,
                 "task_id": task["_id"],
                 "type": "overdue",
-                "created_at": {"$gte": datetime(now.year, now.month, now.day, now.hour)},
+                "created_at": {"$gte": current_hour},
             })
             if not existing:
                 await db.alerts.insert_one({

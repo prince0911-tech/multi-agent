@@ -91,7 +91,6 @@ async def find_free_slots(
     """
     db = get_db()
     day = datetime.fromisoformat(date)
-    tz_offset = timedelta(0)  # UTC
 
     work_start_dt = day.replace(
         hour=int(work_start.split(":")[0]),

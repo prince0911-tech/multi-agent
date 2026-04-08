@@ -36,6 +36,9 @@ async def get_insights(
     completed = await db.tasks.count_documents(
         {"user_id": user_id, "status": "done", "updated_at": {"$gte": since}}
     )
+    total_in_period = await db.tasks.count_documents(
+        {"user_id": user_id, "created_at": {"$gte": since}}
+    )
     overdue = await db.tasks.count_documents({
         "user_id": user_id,
         "deadline": {"$lt": datetime.utcnow()},
@@ -45,7 +48,8 @@ async def get_insights(
         {"user_id": user_id, "status": "in_progress"}
     )
 
-    completion_rate = round(completed / total * 100, 1) if total > 0 else 0.0
+    # Completion rate: tasks completed vs tasks created in the same period
+    completion_rate = round(completed / total_in_period * 100, 1) if total_in_period > 0 else 0.0
 
     # ── Daily completion pattern ──────────────────────────────────────────
     pipeline = [
@@ -97,6 +101,7 @@ async def get_insights(
             "completed_in_period": completed,
             "overdue": overdue,
             "in_progress": in_progress,
+            "total_created_in_period": total_in_period,
             "completion_rate_percent": completion_rate,
         },
         "priority_distribution": priority_dist,
