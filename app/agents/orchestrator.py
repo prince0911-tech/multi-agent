@@ -83,6 +83,7 @@ class OrchestratorAgent:
             temperature=0,
         )
         self.task_agent = TaskAgent()
+        self.calendar_agent = CalendarAgent()
         self.notes_agent = NotesAgent()
         self.risk_agent = RiskAgent()
         self.memory = get_memory(settings.faiss_index_path)
