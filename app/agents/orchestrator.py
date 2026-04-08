@@ -14,7 +14,7 @@ from datetime import datetime
 from typing import Any, Literal, TypedDict
 
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph, END
 from loguru import logger
 
@@ -77,13 +77,12 @@ class OrchestratorAgent:
     def __init__(self) -> None:
         settings = get_settings()
         self.settings = settings
-        self.llm = ChatOpenAI(
-            model=settings.openai_model,
-            api_key=settings.openai_api_key,
+        self.llm = ChatGoogleGenerativeAI(
+            model=settings.gemini_model,
+            google_api_key=settings.google_api_key,
             temperature=0,
         )
         self.task_agent = TaskAgent()
-        self.calendar_agent = CalendarAgent()
         self.notes_agent = NotesAgent()
         self.risk_agent = RiskAgent()
         self.memory = get_memory(settings.faiss_index_path)
